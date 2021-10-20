@@ -12,7 +12,7 @@ export default function App() {
     console.log({ formSubmissionValues: values });
     message.success({
       content: <span>Pipeline created, check values in INSPECTOR CONSOLE</span>,
-      duration: 2
+      duration: 2,
     });
   };
 
@@ -21,7 +21,7 @@ export default function App() {
     { title: "stage1" },
     { title: "stage2" },
     { title: "stage3" },
-    { title: "stage4" }
+    { title: "stage4" },
   ]);
 
   // reorder fn
@@ -56,14 +56,23 @@ export default function App() {
   const itemStyle = (isDragging, draggableStyle) => ({
     padding: 8,
     background: isDragging ? "#535ADF" : "none",
-    ...draggableStyle
+    ...draggableStyle,
   });
 
   // only 1 param to check if dragging of item is over
   const listStyle = (isDraggingOver) => ({
     padding: 8,
-    background: isDraggingOver ? "#E8E8E8" : "none"
+    background: isDraggingOver ? "#E8E8E8" : "none",
   });
+
+  // add and remove stages method -- POC placeholders dont take seriously
+  const addStage = () => {
+    setStages([...stages, { title: `stage${stages.length + 1}` }]);
+  };
+  const removeStage = (stageName) => {
+    let newStages = stages.filter((s) => s.title !== stageName);
+    setStages(newStages);
+  };
 
   return (
     <>
@@ -102,9 +111,20 @@ export default function App() {
                               placeholder={item.title}
                             />
                           </Form.Item>
-                          <Form.Item noStyle name={`pipelineNameStage${index}`}>
+                          <Form.Item noStyle name={`Item${item.title}`}>
                             <Input type="text" />
                           </Form.Item>
+                          {index === stages.length - 1 ? (
+                            <Button onClick={addStage}>+</Button>
+                          ) : (
+                            <Button
+                              type="primary"
+                              danger
+                              onClick={() => removeStage(item.title)}
+                            >
+                              Delete
+                            </Button>
+                          )}
                         </Space>
                       </div>
                     )}
